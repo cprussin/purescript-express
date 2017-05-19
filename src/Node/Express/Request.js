@@ -157,3 +157,8 @@ exports._setData = function (req, field, val) {
     };
 };
 
+exports._getId = function (req) {
+    return function() {
+        return req.id();
+    };
+};

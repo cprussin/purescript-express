@@ -9,6 +9,7 @@ module Node.Express.Request
     , isXhr, getProtocol, getMethod
     , getUrl, getOriginalUrl
     , getUserData, setUserData
+    , getId
     ) where
 
 import Prelude
@@ -189,6 +190,11 @@ queryParams req = do
         Left _ -> pure []
         Right params -> pure params
 
+-- | Return request ID
+getId :: forall e. HandlerM (express :: EXPRESS | e) String
+getId = HandlerM \req _ _ ->
+    liftEff $ _getId req
+
 foreign import _getRouteParam :: forall e a. Fn2 Request a (ExpressM e Foreign)
 
 foreign import _getRoute :: forall e. Request -> ExpressM e String
@@ -240,3 +246,5 @@ foreign import _getOriginalUrl :: forall e. Request -> ExpressM e String
 foreign import _setData :: forall a e. Fn3 Request String a (ExpressM e Unit)
 
 foreign import _getData :: forall e. Fn2 Request String (ExpressM e Foreign)
+
+foreign import _getId :: forall e. Request -> ExpressM e String
